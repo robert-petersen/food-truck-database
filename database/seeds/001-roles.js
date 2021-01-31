@@ -12,6 +12,10 @@ exports.seed = function(knex) {
         {
           roleId: 2, 
           role: 'operator'
+        },
+        {
+          roleId: 3, 
+          role: 'admin'
         }
       ]);
     });

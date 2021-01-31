@@ -30,15 +30,15 @@ router.post("/register-operator", (req, res) => {
     username: originalCredentials.username,
     email: originalCredentials.email,
     password: originalCredentials.password,
-    role: 2
+    roleId: 2
   }
   if (isValid(credentials)) {
     const rounds = process.env.BCRYPT_ROUNDS || 8;
     const hash = bcryptjs.hashSync(credentials.password, rounds);
     credentials.password = hash;
     Users.add(credentials)
-      .then(user => {
-        res.status(201).json({ data: user });
+      .then(operator => {
+        res.status(201).json({ data: operator });
       })
       .catch(error => {
         res.status(500).json({ message: error.message });
@@ -51,28 +51,38 @@ router.post("/register-operator", (req, res) => {
 });
 
 router.post("/register-admin", (req, res) => {
-  const credentials = req.body;
-  if (isValid(credentials)) {
-    const rounds = process.env.BCRYPT_ROUNDS || 8;
-    const hash = bcryptjs.hashSync(credentials.password, rounds);
-    credentials.password = hash;
-    Users.add(credentials)
-      .then(user => {
-        res.status(201).json({ data: user });
-      })
-      .catch(error => {
-        res.status(500).json({ message: error.message });
+  const originalCredentials = req.body;
+  if (originalCredentials.adminCode === process.env.ADMIN_CODE || "developmentPlaceholder") {
+    const credentials = {
+      username: originalCredentials.username,
+      email: originalCredentials.email,
+      password: originalCredentials.password,
+      roleId: 3
+    }
+    if (isValid(credentials)) {
+      const rounds = process.env.BCRYPT_ROUNDS || 8;
+      const hash = bcryptjs.hashSync(credentials.password, rounds);
+      credentials.password = hash;
+      Users.add(credentials)
+        .then(admin => {
+          res.status(201).json({ data: admin });
+        })
+        .catch(error => {
+          res.status(500).json({ message: error.message });
+        });
+    } else {
+      res.status(400).json({
+        message: "Please provide username and password!",
       });
+    }
   } else {
-    res.status(400).json({
-      message: "Please provide username and password!",
-    });
+    res.status(400).json({message: "Invalid Admin Code!"})
   }
 });
 
 router.post("/login", (req, res) => {
   const { username, password } = req.body;
-  if (isValid(req.body)) {
+  if (isValidLogin(req.body)) {
     Users.findBy({ username: username })
       .then(([user]) => {
         if (user && bcryptjs.compareSync(password, user.password)) {
@@ -96,7 +106,6 @@ function generateToken(user) {
   const payload = {
     subject: user.id,
     username: user.username,
-    email: user.email,
     role: user.role,
   }
   const options = {
@@ -113,6 +122,14 @@ function isValid(user) {
     typeof user.password === "string" && 
     user.email && 
     typeof user.email === "string"
+  );
+}
+
+function isValidLogin(user) {
+  return Boolean(
+    user.username && 
+    user.password && 
+    typeof user.password === "string"
   );
 }
 
