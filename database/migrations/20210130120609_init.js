@@ -24,9 +24,9 @@ exports.up = function(knex) {
       tbl.string("cuisineType", 128).notNullable();
       tbl.integer("totalRatings").notNullable();
       tbl.integer("avgRating").notNullable();
-      tbl.integer("lat").notNullable();
-      tbl.integer("long").notNullable();
-      tbl.string("departureTime", 128).notNullable();
+      tbl.integer("lat");
+      tbl.integer("long");
+      tbl.string("departureTime", 128);
       tbl 
       .integer("userId")
       .unsigned()
