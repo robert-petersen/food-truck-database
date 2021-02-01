@@ -3,167 +3,167 @@
 Welcome to the FoodTruck API
 
 ------------------------------------------------------------------------------------
-CRUD    | Route                             | Description
+CRUD____| Route_____________________________| Description___________________________
 ------------------------------------------------------------------------------------
-Register and Login endpoints
+Register and Login endpoints________________________________________________________
 ------------------------------------------------------------------------------------
-POST    | "api/auth/register-user"          | Registers a user (as a customer)
-        |                                   | Requires username, email, and password
-        |                                   | {
-        |                                   |   username: "",
-        |                                   |   password: "",
-        |                                   |   email: "",
-        |                                   | }
-        |                                   | Returns a user object
+POST____| "api/auth/register-user"__________| Registers a user (as a customer)
+________|___________________________________| Requires username, email, and password
+________|___________________________________| {
+________|___________________________________|   username: "",
+________|___________________________________|   password: "",
+________|___________________________________|   email: "",
+________|___________________________________| }
+________|___________________________________| Returns a user object
 ------------------------------------------------------------------------------------
 POST    | "api/auth/register-operator"      | Registers a user (as a operator)
-        |                                   | Requires username, email, and password
-        |                                   | {
-        |                                   |   username: "",
-        |                                   |   password: "",
-        |                                   |   email: "",
-        |                                   | }
-        |                                   | Returns a user object
+________|___________________________________| Requires username, email, and password
+________|___________________________________| {
+________|___________________________________|   username: "",
+________|___________________________________|   password: "",
+________|___________________________________|   email: "",
+________|___________________________________| }
+________|___________________________________| Returns a user object
 ------------------------------------------------------------------------------------
 POST    | "api/auth/register-admin"         | Registers a admin (not required)
-        |                                   | Requires username, email, password
-        |                                   | and admin code (check for in slack)
-        |                                   | {
-        |                                   |   username: "",
-        |                                   |   password: "",
-        |                                   |   email: "",
-        |                                   |   adminCode: "",
-        |                                   | }
-        |                                   | Returns a user object
+________|___________________________________| Requires username, email, password
+________|___________________________________| and admin code (check for in slack)
+________|___________________________________| {
+________|___________________________________|   username: "",
+________|___________________________________|   password: "",
+________|___________________________________|   email: "",
+________|___________________________________|   adminCode: "",
+________|___________________________________| }
+________|___________________________________| Returns a user object
 ------------------------------------------------------------------------------------
 POST    | "api/auth/login"                  | Logs a user in (works for all roles)
-        |                                   | Requires username and password
-        |                                   | {
-        |                                   |   username: "",
-        |                                   |   password: "",
-        |                                   | }
-        |                                   | Returns a token (expires in 1 day)
+________|___________________________________| Requires username and password
+________|___________________________________| {
+________|___________________________________|   username: "",
+________|___________________________________|   password: "",
+________|___________________________________| }
+________|___________________________________| Returns a token (expires in 1 day)
 ------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------
 Trucks data endpoints for operator (user must have operator role)
 ------------------------------------------------------------------------------------
 GET     | "api/trucks/user:userId"          | Gets all trucks belonging to a user
-        |  ex/          ^  ^                | Requires token in Authorization header
-        |  "api/trucks/user2"               | Returns array of truck objects
+________|  ex/          ^  ^                | Requires token in Authorization header
+________|  "api/trucks/user2"               | Returns array of truck objects
 ------------------------------------------------------------------------------------
 GET     | "api/trucks/:truckId"             | Gets the truck with the matching id
-        |                                   | Requires token in Authorization header
-        |                                   | Returns a truck object
+________|___________________________________| Requires token in Authorization header
+________|___________________________________| Returns a truck object
 ------------------------------------------------------------------------------------
 POST    | "api/trucks/user:userId/"         | Creates a new truck owned by that user
-        |                                   | Required fields:
-        |                                   |   {
-        |                                   |     truckName: "",
-        |                                   |     truckImgURL: "",
-        |                                   |     cuisineId: number,
-        |                                   |   }
-        |                                   |   - totalRatings & avgRating are 
-        |                                   |   automatically set at 0 by server
-        |                                   |   - userId is set by server
-        |                                   | Requires token in Authorization header
-        |                                   | Returns the newly created truck object
+________|___________________________________| Required fields:
+________|___________________________________|   {
+________|___________________________________|     truckName: "",
+________|___________________________________|     truckImgURL: "",
+________|___________________________________|     cuisineId: number,
+________|___________________________________|   }
+________|___________________________________|   - totalRatings & avgRating are 
+________|___________________________________|   automatically set at 0 by server
+________|___________________________________|   - userId is set by server
+________|___________________________________| Requires token in Authorization header
+________|___________________________________| Returns the newly created truck object
 ------------------------------------------------------------------------------------
 PUT     | "api/trucks/user:userId/:truckId" | Gets the truck with the matching id
-        |                                   | Required fields:
-        |                                   |   {
-        |                                   |     truckName: "",
-        |                                   |     truckImgURL: "",
-        |                                   |     cuisineId: number,
-        |                                   |     lat: number or null,
-        |                                   |     long: number or null,
-        |                                   |     departureTime: "xx/xx/xxxx xx:xx",
-        |                                   |   }
-        |                                   |   - rating fields cannot be updated
-        |                                   |   - Id's cannot be updated
-        |                                   | Requires token in Authorization header
-        |                                   | Only owner can update
-        |                                   | Returns the updated truck object
+________|___________________________________| Required fields:
+________|___________________________________|   {
+________|___________________________________|     truckName: "",
+________|___________________________________|     truckImgURL: "",
+________|___________________________________|     cuisineId: number,
+________|___________________________________|     lat: number or null,
+________|___________________________________|     long: number or null,
+________|___________________________________|     departureTime: "xx/xx/xxxx xx:xx",
+________|___________________________________|   }
+________|___________________________________|   - rating fields cannot be updated
+________|___________________________________|   - Id's cannot be updated
+________|___________________________________| Requires token in Authorization header
+________|___________________________________| Only owner can update
+________|___________________________________| Returns the updated truck object
 ------------------------------------------------------------------------------------
 DELETE  | "api/trucks/user:userId/:truckId" | Deletes the truck with matching id
-        |                                   | Requires token in Authorization header
-        |                                   | Only owner can delete
-        |                                   | Returns a success message
+________|___________________________________| Requires token in Authorization header
+________|___________________________________| Only owner can delete
+________|___________________________________| Returns a success message
 ------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------
 Menu data endpoints for operator (user must have operator role)
 ------------------------------------------------------------------------------------
 GET     | "api/menus/truck:truckId"         | Gets all menu items belonging to a truck
-        |  ex/          ^  ^                | Requires token in Authorization header
-        |  "api/menus/truck2"               | Returns array of item objects
+________|  ex/          ^  ^                | Requires token in Authorization header
+________|  "api/menus/truck2"               | Returns array of item objects
 ------------------------------------------------------------------------------------
 GET     | "api/menus/:itemId"               | Gets the menu item with the matching id
-        |                                   | Requires token in Authorization header
-        |                                   | Returns a item object
+________|___________________________________| Requires token in Authorization header
+________|___________________________________| Returns a item object
 ------------------------------------------------------------------------------------
 POST    | "api/menus/truck:truckId/"        | Creates a new item owned by that truck
-        |                                   | Required fields:
-        |                                   |   {
-        |                                   |     itemName: "",
-        |                                   |     itemDescription: "",
-        |                                   |     itemImgURL: "",
-        |                                   |     price: "",
-        |                                   |   }
-        |                                   |   - totalRatings & avgRating are
-        |                                   |   automatically set at 0 by server
-        |                                   |   - itemId is set by server
-        |                                   | Requires token in Authorization header
-        |                                   | Returns the newly created menu item object
+________|___________________________________| Required fields:
+________|___________________________________|   {
+________|___________________________________|     itemName: "",
+________|___________________________________|     itemDescription: "",
+________|___________________________________|     itemImgURL: "",
+________|___________________________________|     price: "",
+________|___________________________________|   }
+________|___________________________________|   - totalRatings & avgRating are
+________|___________________________________|   automatically set at 0 by server
+________|___________________________________|   - itemId is set by server
+________|___________________________________| Requires token in Authorization header
+________|___________________________________| Returns the newly created menu item object
 ------------------------------------------------------------------------------------
-PUT     | "api/menus/truck:truckId/:itemId" | Gets the item with the matching id
-        |                                   | Required fields:
-        |                                   |   {
-        |                                   |     itemName: "",
-        |                                   |     itemDescription: "",
-        |                                   |     itemImgURL: "",
-        |                                   |     price: "",
-        |                                   |   }
-        |                                   |   - rating fields cannot be updated
-        |                                   |   - Id's cannot be updated
-        |                                   | Requires token in Authorization header
-        |                                   | Only owner can update
-        |                                   | Returns the updated item object
+PUT_____| "api/menus/truck:truckId/:itemId" | Gets the item with the matching id____
+________|___________________________________| Required fields:______________________
+________|___________________________________|___{__________________________________
+________|___________________________________|_____itemName: "",_____________________
+________|___________________________________|_____itemDescription: "",______________
+________|___________________________________|_____itemImgURL: "",___________________
+________|___________________________________|_____price: "",________________________
+________|___________________________________|___}___________________________________
+________|___________________________________| --- rating fields cannot be updated___
+________|___________________________________| --- Id's cannot be updated____________
+________|___________________________________| Requires token in Authorization header
+________|___________________________________| Only owner can update_________________
+________|___________________________________| Returns the updated item object_______
 ------------------------------------------------------------------------------------
-DELETE  | "api/menus/truck:truckId/:itemId" | Deletes the item with matching id
-        |                                   | Requires token in Authorization header
-        |                                   | Only owner can delete
-        |                                   | Returns a success message
+DELETE__| "api/menus/truck:truckId/:itemId" | Deletes the item with matching id_____
+________|___________________________________| Requires token in Authorization header
+________|___________________________________| Only owner can delete_________________
+________|___________________________________| Returns a success message____________
 ------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------
-Search endpoints (no user role restrictions)
+Search endpoints (no user role restrictions)________________________________________
 ------------------------------------------------------------------------------------
-GET     | "api/search/all"                  | Gets all trucks 
-        |                                   | Requires token in Authorization header
-        |                                   | Returns array of truck objects
-        |                                   | Ordered by when they were registered
+GET_____| "api/search/all"__________________| Gets all trucks ______________________
+________|___________________________________| Requires token in Authorization header
+________|___________________________________| Returns array of truck objects________
+________|___________________________________| Ordered by when they were registered
 ------------------------------------------------------------------------------------
-GET     | "api/search/by-cuisine"           | Gets all trucks of a cuisine type
-        |                                   | Requires token in Authorization header
-        |                                   | Returns array of truck objects
-        |                                   | Ordered by when they were registered
+GET_____| "api/search/by-cuisine"___________| Gets all trucks of a cuisine type______
+________|___________________________________| Requires token in Authorization header
+________|___________________________________| Returns array of truck objects_________
+________|___________________________________| Ordered by when they were registered
 ------------------------------------------------------------------------------------
-GET     | "api/search/by-ratings"           | Gets all trucks by ratings descending
-        |                                   | Requires token in Authorization header
-        |                                   | Returns array of truck objects
-        |                                   | Ordered by ratings descending
+GET     | "api/search/by-ratings"___________| Gets all trucks by ratings descending
+________|___________________________________| Requires token in Authorization header
+________|___________________________________| Returns array of truck objects________
+________|___________________________________| Ordered by ratings descending_________
 ------------------------------------------------------------------------------------
-GET     | "api/search/by-distance"          | Gets all trucks by distance from customer
-        |                                   | Requires location object
-        |                                   | Requires token in Authorization header
-        |    **not made its so hard**       | Returns array of truck objects
-        |                                   | Ordered by distance descending
+GET_____| "api/search/by-distance"__________| Gets all trucks by distance from customer
+________|___________________________________| Requires location object______________
+________|___________________________________| Requires token in Authorization header
+________|____**not made its so hard**_______| Returns array of truck objects________
+________|___________________________________| Ordered by distance descending_________
 ------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------
 Admin endpoints (admin stuff for fun)
 ------------------------------------------------------------------------------------
-GET     | "api/admin/users"                 | Gets all users (only admins allowed)
-        |                                   | Requires token in Authorization header
-        |                                   | Returns array of all user objects
-        |                                   | Made this for fun
+GET_____| "api/admin/users"_________________| Gets all users (only admins allowed)
+________|___________________________________| Requires token in Authorization header
+________|___________________________________| Returns array of all user objects
+________|___________________________________| Made this for fun
 ------------------------------------------------------------------------------------
 
 
