@@ -11,12 +11,12 @@ module.exports = {
 
 function find() {
   return db("trucks as t")
-    .select("t.truckId", "t.truckName", "t.truckImgURL", "t.cuisineType", "t.totalRatings", "t.avgRating", "t.lat", "t.long", "t.departureTime", "t.userId");
+    .select("t.truckId", "t.truckName", "t.truckImgURL", "t.cuisineId", "t.totalRatings", "t.avgRating", "t.lat", "t.long", "t.departureTime", "t.userId");
 }
 
 function findBy(filter) {
   return db("trucks as t")
-    .select("t.truckId", "t.truckName", "t.truckImgURL", "t.cuisineType", "t.totalRatings", "t.avgRating", "t.lat", "t.long", "t.departureTime", "t.userId")
+    .select("t.truckId", "t.truckName", "t.truckImgURL", "t.cuisineId", "t.totalRatings", "t.avgRating", "t.lat", "t.long", "t.departureTime", "t.userId")
     .where(filter);
 }
 
@@ -27,7 +27,7 @@ async function add(truck) {
 
 function findById(id) {
   return db("trucks as t")
-    .select("t.truckId", "t.truckName", "t.truckImgURL", "t.cuisineType", "t.totalRatings", "t.avgRating", "t.lat", "t.long", "t.departureTime", "t.userId")
+    .select("t.truckId", "t.truckName", "t.truckImgURL", "t.cuisineId", "t.totalRatings", "t.avgRating", "t.lat", "t.long", "t.departureTime", "t.userId")
     .where("t.truckId", id)
     .first();
 }

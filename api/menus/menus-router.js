@@ -15,10 +15,10 @@ router.get("/truck:truckId", restricted, restrictRole("operator"), (req, res) =>
     });
 })
 
-// get a menu item
+// get a menu item by id
 router.get("/:itemId", restricted, restrictRole("operator"), (req, res) => {
   Menus.findById(req.params.itemId)
-    .then( ([item]) => {
+    .then( item => {
       if (item) {
         res.status(200).json({ data: item });
       } else {
@@ -57,10 +57,9 @@ router.post("/truck:truckId", restricted, restrictRole("operator"), (req, res) =
 router.put("/truck:truckId/:itemId", restricted, restrictRole("operator"), (req, res) => {
   const originalChangedItem = req.body;
   const itemId = req.params.itemId;
-  const truckId = req.params.truckId;
-  if (updatedItemIsValid(originalChangedItem) && itemBelongsToTruck(itemId, truckId)) {
+  if (updatedItemIsValid(originalChangedItem)) {
     Menus.findById(itemId)
-      .then( ([item]) => {
+      .then( item => {
         const changedItem = {
           ...originalChangedItem,
           totalRatings: item.totalRatings,
@@ -88,28 +87,36 @@ router.put("/truck:truckId/:itemId", restricted, restrictRole("operator"), (req,
 router.delete("/truck:truckId/:itemId", restricted, restrictRole("operator"), (req, res) => {
   const itemId = req.params.itemId;
   const truckId = req.params.truckId;
-  if (itemBelongsToTruck(itemId, truckId)) {
-    Menus.remove(itemId)
-    .then(count => {
-      if (count > 0) {
-        res.status(200).json({ message: "The menu item has been deleted" });
+  Menus.findById(itemId)
+    .then( item => {
+      if( item.truckId == truckId) {
+        Menus.remove(itemId)
+        .then(count => {
+          if (count > 0) {
+            res.status(200).json({ message: "The menu item has been deleted" });
+          } else {
+            res.status(404).json({ message: "The menu item could not be found" });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          res.status(500).json({ message: "Error deleting the menu item", errMessage: err.message });
+        });
       } else {
-        res.status(404).json({ message: "The menu item could not be found" });
+        res.status(403).json({message: "Item doesnt belong to this truck"});
       }
     })
-    .catch(error => {
-      console.log(error);
-      res.status(500).json({ message: "Error deleting the menu item", errMessage: err.message });
+    .catch( err => {
+      res.status(500).json({message: "Error finding item", errMessage: err.message })
     });
-  }
 });
 
 function itemIsValid(item) {
   return Boolean(
     item.itemName && typeof item.itemName === "string" &&
-    item.itemImgURL && typeof item.itemImgURL === "string" &&
     item.itemDescription && typeof item.itemDescription === "string" &&
-    item.price && typeof item.price === "interger" &&
+    item.itemImgURL && typeof item.itemImgURL === "string" &&
+    item.price &&
     !item.totalRatings &&
     !item.avgRatings &&
     !item.itemId &&
@@ -122,25 +129,12 @@ function updatedItemIsValid(item) {
     item.itemName && typeof item.itemName === "string" &&
     item.itemImgURL && typeof item.itemImgURL === "string" &&
     item.itemDescription && typeof item.itemDescription === "string" &&
-    item.price && typeof item.price === "interger" &&
+    item.price &&
     !item.totalRatings &&
     !item.avgRatings &&
     !item.itemId &&
     !item.truckId
   )
-}
-
-function itemBelongsToTruck(itemId, truckId) {
-  const bool = false;
-  Menus.findById(itemId)
-  .then( ([item]) => {
-    if (item.truckId === truckId) {
-      bool = true;
-    } else {
-      res.status(403).json({message: "Item doesnt belong to this truck"})
-    }
-  })
-  return bool;
 }
 
 module.exports = router;

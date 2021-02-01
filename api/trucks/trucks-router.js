@@ -17,8 +17,10 @@ router.get("/user:userId", restricted, restrictRole("operator"), (req, res) => {
 
 // get a truck by id
 router.get("/:truckId", restricted, restrictRole("operator"), (req, res) => {
-  Trucks.findById(req.params.truckId)
-    .then( ([truck]) => {
+  const id = req.params.truckId
+  Trucks.findById(id)
+    .then( truck => {
+      console.log(truck)
       if (truck) {
         res.status(200).json({ data: truck });
       } else {
@@ -60,10 +62,10 @@ router.post("/user:userId", restricted, restrictRole("operator"), (req, res) => 
 router.put("/user:userId/:truckId", restricted, restrictRole("operator"), (req, res) => {
   const originalChangedTruck = req.body;
   const truckId = req.params.truckId;
-  const userId = req.params.userId;
-  if (updatedTruckIsValid(originalChangedTruck) && truckBelongsToUser(truckId, userId)) {
+  if (updatedTruckIsValid(originalChangedTruck)) {
     Trucks.findById(truckId)
-      .then( ([truck]) => {
+      .then( truck => {
+        console.log(truck)
         const changedTruck = {
           ...originalChangedTruck,
           totalRatings: truck.totalRatings,
@@ -91,27 +93,35 @@ router.put("/user:userId/:truckId", restricted, restrictRole("operator"), (req, 
 router.delete("/user:userId/:truckId", restricted, restrictRole("operator"), (req, res) => {
   const truckId = req.params.truckId;
   const userId = req.params.userId;
-  if (truckBelongsToUser(truckId, userId)) {
-    Trucks.remove(truckId)
-    .then(count => {
-      if (count > 0) {
-        res.status(200).json({ message: "The Truck has been deleted" });
+  Trucks.findById(truckId)
+    .then( truck => {
+      if (truck.userId == userId) {
+        Trucks.remove(truckId)
+          .then(count => {
+            if (count > 0) {
+              res.status(200).json({ message: "The Truck has been deleted" });
+            } else {
+              res.status(404).json({ message: "The Truck could not be found" });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+            res.status(500).json({ message: "Error deleting the Truck", errMessage: err.message });
+          });
       } else {
-        res.status(404).json({ message: "The Truck could not be found" });
+        res.status(403).json({message: "Truck doesnt belong to this user"});
       }
     })
-    .catch(error => {
-      console.log(error);
-      res.status(500).json({ message: "Error deleting the Truck", errMessage: err.message });
-    });
-  }
+    .catch( err => {
+      res.status(500).json({message: "Error finding truck", errMessage: err.message });
+    })
 });
 
 function truckIsValid(truck) {
   return Boolean(
     truck.truckName && typeof truck.truckName === "string" &&
     truck.truckImgURL && typeof truck.truckImgURL === "string" &&
-    truck.cuisineType && typeof truck.cuisineType === "string" &&
+    truck.cuisineId &&
     !truck.totalRatings &&
     !truck.avgRatings &&
     !truck.lat &&
@@ -126,7 +136,7 @@ function updatedTruckIsValid(truck) {
   return Boolean(
     truck.truckName && typeof truck.truckName === "string" &&
     truck.truckImgURL && typeof truck.truckImgURL === "string" &&
-    truck.cuisineType && typeof truck.cuisineType === "string" &&
+    truck.cuisineId &&
     !truck.totalRatings &&
     !truck.avgRatings &&
     truck.lat &&
@@ -135,19 +145,6 @@ function updatedTruckIsValid(truck) {
     !truck.userId &&
     !truck.truckId
   )
-}
-
-function truckBelongsToUser(truckId, userId) {
-  const bool = false;
-  Trucks.findById(truckId)
-  .then( ([truck]) => {
-    if (truck.userId === userId) {
-      bool = true;
-    } else {
-      res.status(403).json({message: "Truck doesnt belong to this user"})
-    }
-  })
-  return bool;
 }
 
 module.exports = router;

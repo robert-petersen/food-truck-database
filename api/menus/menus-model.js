@@ -11,12 +11,12 @@ module.exports = {
 
 function find() {
   return db("items as i")
-    .select("i.itemId", "i.itemName", "i.itemDescription", "i.itemImgURL", "i.price", "i.totalRating", "i.avgRating", "i.truckId");
+    .select("i.itemId", "i.itemName", "i.itemDescription", "i.itemImgURL", "i.price", "i.totalRatings", "i.avgRating", "i.truckId");
 }
 
 function findBy(filter) {
   return db("items as i")
-    .select("i.itemId", "i.itemName", "i.itemDescription", "i.itemImgURL", "i.price", "i.totalRating", "i.avgRating", "i.truckId")
+    .select("i.itemId", "i.itemName", "i.itemDescription", "i.itemImgURL", "i.price", "i.totalRatings", "i.avgRating", "i.truckId")
     .where(filter);
 }
 
@@ -27,7 +27,7 @@ async function add(item) {
 
 function findById(id) {
   return db("items as i")
-    .select("i.itemId", "i.itemName", "i.itemDescription", "i.itemImgURL", "i.price", "i.totalRating", "i.avgRating", "i.truckId")
+    .select("i.itemId", "i.itemName", "i.itemDescription", "i.itemImgURL", "i.price", "i.totalRatings", "i.avgRating", "i.truckId")
     .where("i.itemId", id)
     .first();
 }

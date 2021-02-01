@@ -42,9 +42,10 @@ POST    | "api/auth/login"                  | Logs a user in (works for all role
         |                                   |   username: "",
         |                                   |   password: "",
         |                                   | }
-        |                                   | Returns a token
+        |                                   | Returns a token (expires in 1 day)
 ------------------------------------------------------------------------------------
-Trucks data endpoints for operator
+------------------------------------------------------------------------------------
+Trucks data endpoints for operator (user must have operator role)
 ------------------------------------------------------------------------------------
 GET     | "api/trucks/user:userId"          | Gets all trucks belonging to a user
         |  ex/          ^  ^                | Requires token in Authorization header
@@ -59,20 +60,20 @@ POST    | "api/trucks/user:userId/"         | Creates a new truck owned by that 
         |                                   |   {
         |                                   |     truckName: "",
         |                                   |     truckImgURL: "",
-        |                                   |     cuisineType: "",
+        |                                   |     cuisineId: number,
         |                                   |   }
-        |                                   |   - totalRatings & avgRating are
+        |                                   |   - totalRatings & avgRating are 
         |                                   |   automatically set at 0 by server
         |                                   |   - userId is set by server
         |                                   | Requires token in Authorization header
         |                                   | Returns the newly created truck object
 ------------------------------------------------------------------------------------
-UPDATE  | "api/trucks/user:userId/:truckId" | Gets the truck with the matching id
+PUT     | "api/trucks/user:userId/:truckId" | Gets the truck with the matching id
         |                                   | Required fields:
         |                                   |   {
         |                                   |     truckName: "",
         |                                   |     truckImgURL: "",
-        |                                   |     cuisineType: "",
+        |                                   |     cuisineId: number,
         |                                   |     lat: number or null,
         |                                   |     long: number or null,
         |                                   |     departureTime: "xx/xx/xxxx xx:xx",
@@ -88,7 +89,8 @@ DELETE  | "api/trucks/user:userId/:truckId" | Deletes the truck with matching id
         |                                   | Only owner can delete
         |                                   | Returns a success message
 ------------------------------------------------------------------------------------
-Menu data endpoints for operator
+------------------------------------------------------------------------------------
+Menu data endpoints for operator (user must have operator role)
 ------------------------------------------------------------------------------------
 GET     | "api/menus/truck:truckId"         | Gets all menu items belonging to a truck
         |  ex/          ^  ^                | Requires token in Authorization header
@@ -112,7 +114,7 @@ POST    | "api/menus/truck:truckId/"        | Creates a new item owned by that t
         |                                   | Requires token in Authorization header
         |                                   | Returns the newly created menu item object
 ------------------------------------------------------------------------------------
-UPDATE  | "api/menus/truck:truckId/:itemId" | Gets the item with the matching id
+PUT     | "api/menus/truck:truckId/:itemId" | Gets the item with the matching id
         |                                   | Required fields:
         |                                   |   {
         |                                   |     itemName: "",
@@ -131,9 +133,34 @@ DELETE  | "api/menus/truck:truckId/:itemId" | Deletes the item with matching id
         |                                   | Only owner can delete
         |                                   | Returns a success message
 ------------------------------------------------------------------------------------
-User endpoints
 ------------------------------------------------------------------------------------
-GET     | "api/users"                       | Gets all users (only admins allowed)
+Search endpoints (no user role restrictions)
+------------------------------------------------------------------------------------
+GET     | "api/search/all"                  | Gets all trucks 
+        |                                   | Requires token in Authorization header
+        |                                   | Returns array of truck objects
+        |                                   | Ordered by when they were registered
+------------------------------------------------------------------------------------
+GET     | "api/search/by-cuisine"           | Gets all trucks of a cuisine type
+        |                                   | Requires token in Authorization header
+        |                                   | Returns array of truck objects
+        |                                   | Ordered by when they were registered
+------------------------------------------------------------------------------------
+GET     | "api/search/by-ratings"           | Gets all trucks by ratings descending
+        |                                   | Requires token in Authorization header
+        |                                   | Returns array of truck objects
+        |                                   | Ordered by ratings descending
+------------------------------------------------------------------------------------
+GET     | "api/search/by-distance"          | Gets all trucks by distance from customer
+        |                                   | Requires location object
+        |                                   | Requires token in Authorization header
+        |    **not made its so hard**       | Returns array of truck objects
+        |                                   | Ordered by distance descending
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+Admin endpoints (admin stuff for fun)
+------------------------------------------------------------------------------------
+GET     | "api/admin/users"                 | Gets all users (only admins allowed)
         |                                   | Requires token in Authorization header
         |                                   | Returns array of all user objects
         |                                   | Made this for fun
