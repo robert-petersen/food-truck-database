@@ -148,8 +148,8 @@ GET     | "api/search/by-cuisine"           | Gets all trucks of a cuisine type
 ------------------------------------------------------------------------------------
 GET     | "api/search/by-ratings"           | Gets all trucks by ratings descending
         |                                   | Requires token in Authorization header
-        |                                   | Returns array of truck objects
-        |                                   | Ordered by ratings descending
+        |     **not fully tested**          | Returns array of truck objects
+        |      **needs mock data**          | Ordered by ratings descending
 ------------------------------------------------------------------------------------
 GET     | "api/search/by-distance"          | Gets all trucks by distance from customer
         |                                   | Requires location object
