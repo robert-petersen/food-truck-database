@@ -2,7 +2,7 @@ const bcryptjs = require("bcryptjs");
 const jwt = require('jsonwebtoken')
 const router = require("express").Router();
 const { jwtSecret } = require('../../config/secrets.js')
-const Users = require("../users/users-model.js");
+const Users = require("../admin/admin-model.js");
 
 router.post("/register-user", (req, res) => {
   const credentials = req.body;
@@ -15,7 +15,7 @@ router.post("/register-user", (req, res) => {
         res.status(201).json({ data: user });
       })
       .catch(error => {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: "Error validating credentials", errMessage: error.message });
       });
   } else {
     res.status(400).json({
@@ -41,7 +41,7 @@ router.post("/register-operator", (req, res) => {
         res.status(201).json({ data: operator });
       })
       .catch(error => {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: "Error validating credentials", errMessage: error.message });
       });
   } else {
     res.status(400).json({
@@ -68,7 +68,7 @@ router.post("/register-admin", (req, res) => {
           res.status(201).json({ data: admin });
         })
         .catch(error => {
-          res.status(500).json({ message: error.message });
+          res.status(500).json({ message: "Error validating credentials", errMessage: error.message });
         });
     } else {
       res.status(400).json({
@@ -93,7 +93,7 @@ router.post("/login", (req, res) => {
         }
       })
       .catch(error => {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: "Error loging in", errMessage: error.message });
       });
   } else {
     res.status(400).json({

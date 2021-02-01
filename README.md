@@ -1,5 +1,174 @@
 ** FOOD TRUCK API **
 
+Welcome to the FoodTruck API
+
+------------------------------------------------------------------------------------
+CRUD    | Route                             | Description
+------------------------------------------------------------------------------------
+Register and Login endpoints
+------------------------------------------------------------------------------------
+POST    | "api/auth/register-user"          | Registers a user (as a customer)
+        |                                   | Requires username, email, and password
+        |                                   | {
+        |                                   |   username: "",
+        |                                   |   password: "",
+        |                                   |   email: "",
+        |                                   | }
+        |                                   | Returns a user object
+------------------------------------------------------------------------------------
+POST    | "api/auth/register-operator"      | Registers a user (as a operator)
+        |                                   | Requires username, email, and password
+        |                                   | {
+        |                                   |   username: "",
+        |                                   |   password: "",
+        |                                   |   email: "",
+        |                                   | }
+        |                                   | Returns a user object
+------------------------------------------------------------------------------------
+POST    | "api/auth/register-admin"         | Registers a admin (not required)
+        |                                   | Requires username, email, password
+        |                                   | and admin code (check for in slack)
+        |                                   | {
+        |                                   |   username: "",
+        |                                   |   password: "",
+        |                                   |   email: "",
+        |                                   |   adminCode: "",
+        |                                   | }
+        |                                   | Returns a user object
+------------------------------------------------------------------------------------
+POST    | "api/auth/login"                  | Logs a user in (works for all roles)
+        |                                   | Requires username and password
+        |                                   | {
+        |                                   |   username: "",
+        |                                   |   password: "",
+        |                                   | }
+        |                                   | Returns a token (expires in 1 day)
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+Trucks data endpoints for operator (user must have operator role)
+------------------------------------------------------------------------------------
+GET     | "api/trucks/user:userId"          | Gets all trucks belonging to a user
+        |  ex/          ^  ^                | Requires token in Authorization header
+        |  "api/trucks/user2"               | Returns array of truck objects
+------------------------------------------------------------------------------------
+GET     | "api/trucks/:truckId"             | Gets the truck with the matching id
+        |                                   | Requires token in Authorization header
+        |                                   | Returns a truck object
+------------------------------------------------------------------------------------
+POST    | "api/trucks/user:userId/"         | Creates a new truck owned by that user
+        |                                   | Required fields:
+        |                                   |   {
+        |                                   |     truckName: "",
+        |                                   |     truckImgURL: "",
+        |                                   |     cuisineId: number,
+        |                                   |   }
+        |                                   |   - totalRatings & avgRating are 
+        |                                   |   automatically set at 0 by server
+        |                                   |   - userId is set by server
+        |                                   | Requires token in Authorization header
+        |                                   | Returns the newly created truck object
+------------------------------------------------------------------------------------
+PUT     | "api/trucks/user:userId/:truckId" | Gets the truck with the matching id
+        |                                   | Required fields:
+        |                                   |   {
+        |                                   |     truckName: "",
+        |                                   |     truckImgURL: "",
+        |                                   |     cuisineId: number,
+        |                                   |     lat: number or null,
+        |                                   |     long: number or null,
+        |                                   |     departureTime: "xx/xx/xxxx xx:xx",
+        |                                   |   }
+        |                                   |   - rating fields cannot be updated
+        |                                   |   - Id's cannot be updated
+        |                                   | Requires token in Authorization header
+        |                                   | Only owner can update
+        |                                   | Returns the updated truck object
+------------------------------------------------------------------------------------
+DELETE  | "api/trucks/user:userId/:truckId" | Deletes the truck with matching id
+        |                                   | Requires token in Authorization header
+        |                                   | Only owner can delete
+        |                                   | Returns a success message
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+Menu data endpoints for operator (user must have operator role)
+------------------------------------------------------------------------------------
+GET     | "api/menus/truck:truckId"         | Gets all menu items belonging to a truck
+        |  ex/          ^  ^                | Requires token in Authorization header
+        |  "api/menus/truck2"               | Returns array of item objects
+------------------------------------------------------------------------------------
+GET     | "api/menus/:itemId"               | Gets the menu item with the matching id
+        |                                   | Requires token in Authorization header
+        |                                   | Returns a item object
+------------------------------------------------------------------------------------
+POST    | "api/menus/truck:truckId/"        | Creates a new item owned by that truck
+        |                                   | Required fields:
+        |                                   |   {
+        |                                   |     itemName: "",
+        |                                   |     itemDescription: "",
+        |                                   |     itemImgURL: "",
+        |                                   |     price: "",
+        |                                   |   }
+        |                                   |   - totalRatings & avgRating are
+        |                                   |   automatically set at 0 by server
+        |                                   |   - itemId is set by server
+        |                                   | Requires token in Authorization header
+        |                                   | Returns the newly created menu item object
+------------------------------------------------------------------------------------
+PUT     | "api/menus/truck:truckId/:itemId" | Gets the item with the matching id
+        |                                   | Required fields:
+        |                                   |   {
+        |                                   |     itemName: "",
+        |                                   |     itemDescription: "",
+        |                                   |     itemImgURL: "",
+        |                                   |     price: "",
+        |                                   |   }
+        |                                   |   - rating fields cannot be updated
+        |                                   |   - Id's cannot be updated
+        |                                   | Requires token in Authorization header
+        |                                   | Only owner can update
+        |                                   | Returns the updated item object
+------------------------------------------------------------------------------------
+DELETE  | "api/menus/truck:truckId/:itemId" | Deletes the item with matching id
+        |                                   | Requires token in Authorization header
+        |                                   | Only owner can delete
+        |                                   | Returns a success message
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+Search endpoints (no user role restrictions)
+------------------------------------------------------------------------------------
+GET     | "api/search/all"                  | Gets all trucks 
+        |                                   | Requires token in Authorization header
+        |                                   | Returns array of truck objects
+        |                                   | Ordered by when they were registered
+------------------------------------------------------------------------------------
+GET     | "api/search/by-cuisine"           | Gets all trucks of a cuisine type
+        |                                   | Requires token in Authorization header
+        |                                   | Returns array of truck objects
+        |                                   | Ordered by when they were registered
+------------------------------------------------------------------------------------
+GET     | "api/search/by-ratings"           | Gets all trucks by ratings descending
+        |                                   | Requires token in Authorization header
+        |                                   | Returns array of truck objects
+        |                                   | Ordered by ratings descending
+------------------------------------------------------------------------------------
+GET     | "api/search/by-distance"          | Gets all trucks by distance from customer
+        |                                   | Requires location object
+        |                                   | Requires token in Authorization header
+        |    **not made its so hard**       | Returns array of truck objects
+        |                                   | Ordered by distance descending
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+Admin endpoints (admin stuff for fun)
+------------------------------------------------------------------------------------
+GET     | "api/admin/users"                 | Gets all users (only admins allowed)
+        |                                   | Requires token in Authorization header
+        |                                   | Returns array of all user objects
+        |                                   | Made this for fun
+------------------------------------------------------------------------------------
+
+
+Project Details:
+
 ## ☝️ **Pitch**
 
 Every true "foodie" worth their salt knows that some of the best food in any city can be found on food trucks - but knowing when and where those trucks will be can be next to impossible, and discovering new ones often relies on word-of-mouth that is long on tales of delicious, but short on actual details. 
