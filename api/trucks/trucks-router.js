@@ -34,7 +34,8 @@ router.get("/:truckId", restricted, restrictRole("operator"), (req, res) => {
 
 //create a truck
 router.post("/user:userId", restricted, restrictRole("operator"), (req, res) => {
-  const id = req.params.userId;
+  const stringId = req.params.userId;
+  const id = parseInt(stringId, 10);
   const originalNewTruck = req.body;
   if (truckIsValid(originalNewTruck)) {
     const newTruck = {
