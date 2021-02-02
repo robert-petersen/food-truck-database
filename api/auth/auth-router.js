@@ -91,7 +91,7 @@ router.post("/login", (req, res) => {
         if (user && bcryptjs.compareSync(loginuser.password, user.password)) {
           const token = generateToken(user);
           const isOperator = Boolean(user.role === "operator")
-          res.status(200).json({ message: `Welcome ${user.username}`, token, isOperator });
+          res.status(200).json({ message: `Welcome ${user.username}`, token, isOperator, loggedInUserId: user.userId });
         } else {
           res.status(401).json({ message: "Invalid Credentials!" });
         }

@@ -43,7 +43,13 @@ POST    | "api/auth/login"                  | Logs a user in (works for all role
         |                                   |   password: "",
         |                                   |   isOperator: bool,
         |                                   | }
-        |                                   | Returns a token (expires in 1 day)
+        |                                   | Returns
+        |                                   | {
+        |                                   |   message: "",
+        |                                   |   token: token (expires in 1 day),
+        |                                   |   isOperator: bool,
+        |                                   |   loggedInUserId: id,
+        |                                   | }
 ------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------
 Trucks data endpoints for operator (user must have operator role)
