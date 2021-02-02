@@ -41,7 +41,7 @@ POST    | "api/auth/login"                  | Logs a user in (works for all role
         |                                   | {
         |                                   |   username: "",
         |                                   |   password: "",
-        |                                   |   isOperator: ""
+        |                                   |   isOperator: bool,
         |                                   | }
         |                                   | Returns a token (expires in 1 day)
 ------------------------------------------------------------------------------------
