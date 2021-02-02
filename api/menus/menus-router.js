@@ -32,7 +32,8 @@ router.get("/:itemId", restricted, restrictRole("operator"), (req, res) => {
 
 //create a new menu item
 router.post("/truck:truckId", restricted, restrictRole("operator"), (req, res) => {
-  const id = req.params.truckId;
+  const stringId = req.params.truckId;
+  const id = parseInt(stringId, 10);
   const originalNewitem = req.body;
   if (itemIsValid(originalNewitem)) {
     const newItem = {
