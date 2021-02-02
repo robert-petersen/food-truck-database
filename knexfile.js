@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-// const pgConnection = process.env.DATABASE_URL || "postgresql://postgres@localhost/auth";
+const DB = process.env.DB;
 
 module.exports = {
 
@@ -24,37 +24,11 @@ module.exports = {
   },
 
   production: {
-    client: 'sqlite3',
-    useNullAsDefault: true,
-    connection: {
-      filename: './database/foodtruck.db3'
-    },
-    pool: {
-      afterCreate: (conn, done) => {
-        conn.run("PRAGMA foreign_keys = ON", done);
-      },
-    },
+    client: "pg",
+    connection: DB,
     migrations: {
-      directory: "./database/migrations",
+      directory: "./data/migrations",
     },
-    seeds: {
-      directory: "./database/seeds",
-    },
+    seeds: { directory: "./data/seeds" },
   }
-
-  // production: {
-  //   client: "pg",
-  //   useNullAsDefault: true,
-  //   connection: pgConnection,
-  //   pool: {
-  //     min: 2,
-  //     max: 10,
-  //   },
-  //   migrations: {
-  //     directory: "./database/migrations",
-  //   },
-  //   seeds: {
-  //     directory: "./database/seeds",
-  //   },
-  // }
 };
