@@ -86,14 +86,15 @@ router.post("/login", (req, res) => {
     Users.findBy({ username: username })
       .then(([user]) => {
         if (user && bcryptjs.compareSync(password, user.password)) {
-          const token = generateToken(user)
-          res.status(200).json({ message: `Welcome ${user.username}`, token });
+          const token = generateToken(user);
+          const op = Boolean(user.role === "operator")
+          res.status(200).json({ message: `Welcome ${user.username}`, token, op });
         } else {
           res.status(401).json({ message: "Invalid Credentials!" });
         }
       })
       .catch(error => {
-        res.status(500).json({ message: "Error loging in", errMessage: error.message });
+        res.status(500).json({ message: "Error loging in", errMessage: error.message, isOperator: op });
       });
   } else {
     res.status(400).json({
