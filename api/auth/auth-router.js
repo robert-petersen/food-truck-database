@@ -81,11 +81,14 @@ router.post("/register-admin", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  const { username, password } = req.body;
-  if (isValidLogin(req.body)) {
-    Users.findBy({ username: username })
+  const loginuser = {
+    username: req.body.username,
+    password: req.body.password
+  }
+  if (isValidLogin(loginuser)) {
+    Users.findBy({ username: loginuser.username })
       .then(([user]) => {
-        if (user && bcryptjs.compareSync(password, user.password)) {
+        if (user && bcryptjs.compareSync(loginuser.password, user.password)) {
           const token = generateToken(user);
           const isOperator = Boolean(user.role === "operator")
           res.status(200).json({ message: `Welcome ${user.username}`, token, isOperator });
@@ -98,7 +101,7 @@ router.post("/login", (req, res) => {
       });
   } else {
     res.status(400).json({
-      message: "Please provide username and password!",
+      message: "Please provide username and password!", recived: req.body
     });
   }
 });
