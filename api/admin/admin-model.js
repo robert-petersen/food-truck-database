@@ -21,9 +21,10 @@ function findBy(filter) {
 }
 
 async function add(user) {
-  await db("users").insert(user, "id");
-  const userObj = await findBy(user.username);
-  return userObj.id;
+  await db("users").insert(user, "");
+  const userObj = await db("users").where("username", user.username).first()
+  console.log(userObj)
+  return userObj;
 }
 
 function findById(id) {

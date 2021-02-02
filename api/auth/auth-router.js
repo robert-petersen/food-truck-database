@@ -5,7 +5,13 @@ const { jwtSecret } = require('../../config/secrets.js')
 const Users = require("../admin/admin-model.js");
 
 router.post("/register-user", (req, res) => {
-  const credentials = req.body;
+  const originalCredentials = req.body;
+  const credentials = {
+    username: originalCredentials.username,
+    email: originalCredentials.email,
+    password: originalCredentials.password,
+    roleId: 1
+  }
   if (isValid(credentials)) {
     const rounds = process.env.BCRYPT_ROUNDS || 8;
     const hash = bcryptjs.hashSync(credentials.password, rounds);

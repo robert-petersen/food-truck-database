@@ -48,7 +48,7 @@ exports.up = function(knex) {
       tbl.string("itemName", 128).notNullable();
       tbl.string("itemDescription", 128).notNullable();
       tbl.string("itemImgURL", 256).notNullable();
-      tbl.integer("price").notNullable();
+      tbl.float("price").notNullable();
       tbl.integer("totalRatings").notNullable();
       tbl.integer("avgRating").notNullable();
       tbl 
