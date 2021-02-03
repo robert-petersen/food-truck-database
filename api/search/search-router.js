@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Search = require("./search-model.js");
 const Trucks = require("../trucks/trucks-model.js");
+const Menus = require("../menus/menus-model.js");
 const restricted = require("../middleware/restricted-middleware.js");
 
 // user search all trucks
