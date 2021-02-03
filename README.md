@@ -149,6 +149,9 @@ GET     | "api/search/all"                  | Gets all trucks
         |                                   | Ordered by when they were registered
 ------------------------------------------------------------------------------------
 GET     | "api/search/by-cuisine"           | Gets all trucks of a cuisine type
+        |                                   |  {
+        |                                   |     cuisineId: id
+        |                                   |  }
         |                                   | Requires token in Authorization header
         |                                   | Returns array of truck objects
         |                                   | Ordered by when they were registered
