@@ -59,7 +59,7 @@ router.get("/by-ratings", restricted, (req, res) => {
 
 // user reviews a truck
 router.put("/review-truck/:truckId", restricted, (req, res) => {
-  const review = req.body;
+  const review = req.body.review;
   const truckId = req.params.truckId;
   if (reviewIsValid(review)) {
     Trucks.findById(truckId)
@@ -67,13 +67,15 @@ router.put("/review-truck/:truckId", restricted, (req, res) => {
         let avgRating = truck.avgRating;
         let totalRatings = truck.totalRatings;
         let ratingTotal = (avgRating * totalRatings) + review;
-        totalRatings = totalRatings + 1;
-        avgRating = Math.ceil(ratingTotal / totalRatings);
+        totalRatings++;
+        let math = ratingTotal / totalRatings;
+        avgRating = Math.ceil(math);
         const changedTruck = {
           ...truck,
           totalRatings: totalRatings,
           avgRating: avgRating
         }
+        console.log(changedTruck)
         Trucks.update(truckId, changedTruck)
           .then( truck => {
             res.status(201).json({ message: changedTruck })
@@ -92,7 +94,7 @@ router.put("/review-truck/:truckId", restricted, (req, res) => {
 
 //user reviews an item
 router.put("/review-item/:itemId", restricted, (req, res) => {
-  const review = req.body;
+  const review = req.body.review;
   const itemId = req.params.itemId;
   if (reviewIsValid(review)) {
     Menus.findById(itemId)
@@ -107,6 +109,7 @@ router.put("/review-item/:itemId", restricted, (req, res) => {
           totalRatings: totalRatings,
           avgRating: avgRating
         }
+        console.log(changedItem)
         Menus.update(itemId, changedItem)
           .then( truck => {
             res.status(201).json({ data: changedItem })
@@ -125,7 +128,7 @@ router.put("/review-item/:itemId", restricted, (req, res) => {
 
 function reviewIsValid(review) {
   return Boolean(
-    review.rating
+    review
   )
 }
 
