@@ -22,7 +22,7 @@ function findBy(filter) {
 
 async function add(item) {
   await db("items").insert(item, "");
-  const itemObj = await db("trucks").where("itemName", item.itemName).first()
+  const itemObj = await db("items").where("itemName", item.itemName).first()
   console.log(itemObj)
   return itemObj.itemId;
 }
