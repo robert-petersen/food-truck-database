@@ -127,6 +127,18 @@ router.put("/review-item/:itemId", restricted, (req, res) => {
   }
 });
 
+router.get("/truck:truckId", restricted, (req, res) => {
+  const id = req.params.truckId;
+  Menus.findBy({ truckId: id })
+    .then( items => {
+      res.status(200).json({ data: items })
+    })
+    .catch( err => {
+      res.status(500).json({ message: "Error retrieving the menu items", errMessage: err.message })
+    });
+})
+
+
 function reviewIsValid(review) {
   return Boolean(
     review
