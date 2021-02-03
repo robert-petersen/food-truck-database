@@ -68,7 +68,7 @@ router.put("/review-truck/:truckId", restricted, (req, res) => {
         let totalRatings = truck.totalRatings;
         let ratingTotal = (avgRating * totalRatings) + review;
         totalRatings = totalRatings + 1;
-        let avgRating = Math.ceil(ratingTotal / totalRatings);
+        avgRating = Math.ceil(ratingTotal / totalRatings);
         const changedTruck = {
           ...truck,
           totalRatings: totalRatings,
@@ -101,7 +101,7 @@ router.put("/review-item/:itemId", restricted, (req, res) => {
         let totalRatings = item.totalRatings;
         let ratingTotal = (avgRating * totalRatings) + review;
         totalRatings = totalRatings + 1;
-        let avgRating = Math.ceil(ratingTotal / totalRatings);
+        avgRating = Math.ceil(ratingTotal / totalRatings);
         const changedItem = {
           ...item,
           totalRatings: totalRatings,
