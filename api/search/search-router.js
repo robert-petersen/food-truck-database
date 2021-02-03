@@ -66,32 +66,61 @@ router.put("/review-truck/:truckId", restricted, (req, res) => {
       .then( truck => {
         let avgRating = truck.avgRating;
         let totalRatings = truck.totalRatings;
-        let ratingTotal = avgrating * totalRatings;
-        
+        let ratingTotal = (avgRating * totalRatings) + review;
+        totalRatings = totalRatings + 1;
+        let avgRating = Math.ceil(ratingTotal / totalRatings);
         const changedTruck = {
           ...truck,
-          totalRatings: truck.totalRatings,
-          avgRating: truck.avgRating
+          totalRatings: totalRatings,
+          avgRating: avgRating
         }
         Trucks.update(truckId, changedTruck)
           .then( truck => {
-            res.status(201).json({ data: changedTruck })
+            res.status(201).json({ message: changedTruck })
           })
           .catch( err => {
-            res.status(500).json({ message: "Error updating the truck", errMessage: err.message });
+            res.status(500).json({ message: "Error updating the truck with new rating", errMessage: err.message });
           })
       })
       .catch( err => {
-        res.status(500).json({ message: "Error retrieving the truck", errMessage: err.message })
+        res.status(500).json({ message: "Error retrieving the truck with that Id", errMessage: err.message })
       })
   } else {
-    res.status(400).json("Please provide all required fields for a truck.")
+    res.status(400).json("Please provide a rating.")
   }
 });
 
 //user reviews an item
 router.put("/review-item/:itemId", restricted, (req, res) => {
-
+  const review = req.body;
+  const itemId = req.params.itemId;
+  if (reviewIsValid(review)) {
+    Menus.findById(itemId)
+      .then( item => {
+        let avgRating = item.avgRating;
+        let totalRatings = item.totalRatings;
+        let ratingTotal = (avgRating * totalRatings) + review;
+        totalRatings = totalRatings + 1;
+        let avgRating = Math.ceil(ratingTotal / totalRatings);
+        const changedItem = {
+          ...item,
+          totalRatings: totalRatings,
+          avgRating: avgRating
+        }
+        Menus.update(itemId, changedItem)
+          .then( truck => {
+            res.status(201).json({ data: changedItem })
+          })
+          .catch( err => {
+            res.status(500).json({ message: "Error updating the item with new rating", errMessage: err.message });
+          })
+      })
+      .catch( err => {
+        res.status(500).json({ message: "Error retrieving the item with that Id", errMessage: err.message })
+      })
+  } else {
+    res.status(400).json("Please provide a rating.")
+  }
 });
 
 function reviewIsValid(review) {

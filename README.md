@@ -167,6 +167,20 @@ GET     | "api/search/by-distance"          | Gets all trucks by distance from c
         |    **not made its so hard**       | Returns array of truck objects
         |                                   | Ordered by distance descending
 ------------------------------------------------------------------------------------
+GET     | "api/search/review-truck/:truckId"| Updates truck rating based on added rating
+        |                                   |  {
+        |                                   |     review: whole number between 1 & 5
+        |                                   |  }
+        |                                   | Requires token in Authorization header
+        |                                   | Returns truck object
+------------------------------------------------------------------------------------
+GET     | "api/search/review-item/:itemId"  | Updates item rating based on added rating
+        |                                   |  {
+        |                                   |     review: whole number between 1 & 5
+        |                                   |  }
+        |                                   | Requires token in Authorization header
+        |                                   | Returns item object
+------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------
 Admin endpoints (admin stuff for fun)
 ------------------------------------------------------------------------------------
