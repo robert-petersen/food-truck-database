@@ -191,6 +191,34 @@ GET     | "api/admin/users"                 | Gets all users (only admins allowe
 ------------------------------------------------------------------------------------
 
 
+
+
+cuisineId	cuisineType
+1	        Pizza
+2	        American
+3	        Chinese
+4	        Sandwiches
+5	        Mexican
+6	        Indian
+7	        Italian
+8	        Vegan
+9	        Japanese
+10	        Chicken
+
+
+
+
+
+roleId	role
+1	customer
+2	operator
+3	admin
+
+
+
+
+
+
 Project Details:
 
 ## ☝️ **Pitch**
