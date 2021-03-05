@@ -1,7 +1,7 @@
 ** FOOD TRUCK API **
 
 Welcome to the FoodTruck API
-
+```
 ------------------------------------------------------------------------------------
 CRUD    | Route                             | Description
 ------------------------------------------------------------------------------------
@@ -192,10 +192,10 @@ GET     | "api/admin/users"                 | Gets all users (only admins allowe
         |                                   | Returns array of all user objects
         |                                   | Made this for fun
 ------------------------------------------------------------------------------------
+```
 
 
-
-
+```
 cuisineId	cuisineType
 1	        Pizza
 2	        American
@@ -207,16 +207,16 @@ cuisineId	cuisineType
 8	        Vegan
 9	        Japanese
 10	        Chicken
+```
 
 
 
-
-
+```
 roleId	role
 1	customer
 2	operator
 3	admin
-
+```
 
 
 
